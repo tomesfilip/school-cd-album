@@ -1,5 +1,3 @@
--- Active: 1668107191875@@localhost@3306
-
 DROP TABLE IF EXISTS albums;
 
 CREATE TABLE
@@ -30,7 +28,7 @@ VALUES (
         2005,
         'pop',
         'song1, song2',
-        '/Users/tomes/Documents/school/mp/data/images/img-cover.jpg'
+        '/Users/tomes/Documents/school/multiplatform/CDalbum/data/images/img-cover.jpg'
     );
 
 INSERT INTO
@@ -50,7 +48,7 @@ VALUES (
         2006,
         'rock',
         'song1, song2, song3',
-        '/Users/tomes/Documents/school/mp/data/images/img-cover.jpg'
+        '/Users/tomes/Documents/school/multiplatform/CDalbum/data/images/img-cover.jpg'
     );
 
 INSERT INTO
@@ -70,5 +68,5 @@ VALUES (
         2015,
         'metal',
         'song1, song2, song3, song4, song5',
-        '/Users/tomes/Documents/school/mp/data/images/img-cover.jpg'
+        '/Users/tomes/Documents/school/multiplatform/CDalbum/data/images/img-cover.jpg'
     );
