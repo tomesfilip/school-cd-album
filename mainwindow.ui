@@ -125,6 +125,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QPlainTextEdit" name="teSearchYear">
       <property name="geometry">
@@ -135,6 +138,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QPlainTextEdit" name="teSearchAuthor">
       <property name="geometry">
@@ -144,6 +150,9 @@
         <width>104</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QListWidget" name="albumList">
@@ -245,6 +254,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QPlainTextEdit" name="teGenre">
       <property name="geometry">
@@ -254,6 +266,9 @@
         <width>104</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label_4">
@@ -291,6 +306,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QPlainTextEdit" name="teAuthorName">
       <property name="geometry">
@@ -300,6 +318,9 @@
         <width>104</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="selectImageButton">
@@ -323,6 +344,9 @@
         <width>104</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="tabChangesFocus">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
