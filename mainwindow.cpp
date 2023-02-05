@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 
+#define YEAR_RX "\\d{4}"
+
 void renderAlbums(Ui::MainWindow *ui) {
     QSqlQuery getAllAlbums("SELECT * FROM albums");
      ui->albumList->clear();
@@ -24,6 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->albumList->setViewMode(QListWidget::IconMode);
     ui->albumList->setIconSize(QSize(150, 150));
     ui->albumList->setResizeMode(QListWidget::Adjust);
+
+    QRegularExpression yearRx(YEAR_RX);
+    QRegularExpressionValidator *yearValidator = new QRegularExpressionValidator(yearRx, this);
+    ui->teSearchYear->setValidator(yearValidator);
+    ui->teYearOfCreation->setValidator(yearValidator);
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QDir::current().absoluteFilePath("data/Album.db"));
@@ -55,7 +62,7 @@ void MainWindow::on_searchButton_clicked()
 {
     const QString authorSearch = ui->teSearchAuthor->toPlainText();
     const QString genreSearch = ui->teSearchGenre->toPlainText();
-    const QString yearSearch = ui->teSearchYear->toPlainText();
+    const QString yearSearch = ui->teSearchYear->text();
 
     QSqlQuery querySearch;
     QString searchString = "SELECT * FROM albums WHERE ";
@@ -176,7 +183,7 @@ void MainWindow::on_addAlbumButton_clicked()
     const QString albumId = QUuid::createUuid().toString();
     const QString albumName = ui->teAlbumName->toPlainText();
     const QString authorName = ui->teAuthorName->toPlainText();
-    const QString yearOfCreation = ui->teYearOfCreation->toPlainText();
+    const QString yearOfCreation = ui->teYearOfCreation->text();
     const QString genre = ui->teGenre->toPlainText();
     const QString listOfSongs = ui->teListOfSongs->toPlainText();
     QString coverImg = ui->coverImgLabel->text();
