@@ -125,6 +125,7 @@ void MainWindow::on_goToDetailButton_clicked()
 
     if (!querySearch.exec(searchString)) {
         QMessageBox::information(this, "Query not executed", "Search query was not executed.");
+        return;
     } else {
         if (querySearch.next()) {
             ui->albumName->setText(querySearch.value("album_name").toString());
@@ -134,6 +135,7 @@ void MainWindow::on_goToDetailButton_clicked()
             QString songListString = querySearch.value("song_list").toString();
             QStringList songList = songListString.split(",");
 
+            ui->albumSongList->clear();
             for (const QString& song : songList)
             {
                 ui->albumSongList->addItem(song);
@@ -194,6 +196,19 @@ void MainWindow::on_addAlbumButton_clicked()
         coverImg = QDir::current().absoluteFilePath("data/images/img-cover.jpg");
     }
 
+    QSqlQuery querySearch;
+    QString searchString = "SELECT * FROM albums WHERE album_name = '" + albumName + "'";
+
+    if (!querySearch.exec(searchString)) {
+        QMessageBox::information(this, "Query not executed", "Search query was not executed.");
+        return;
+    } else {
+        if (querySearch.next()) {
+            QMessageBox::information(this, "Error", "You can't add the album with the same name.");
+            return;
+        }
+    }
+
     QSqlQuery queryAddAlbum;
     queryAddAlbum.prepare("INSERT INTO albums (album_id, author_name, album_name, creation_year, genre, song_list, cover_image) "
                           "VALUES (:albumId, :authorName, :albumName, :yearOfCreation, :genre, :listOfSongs, :coverImg)");
@@ -209,6 +224,7 @@ void MainWindow::on_addAlbumButton_clicked()
 
     if (!queryAddAlbum.exec()) {
         QMessageBox::information(this, "Query not executed", "Insertion query was not executed.");
+        return;
     } else {
         QMessageBox::information(this, "Album added", "The album has been added to the collection.");
 
@@ -219,5 +235,99 @@ void MainWindow::on_addAlbumButton_clicked()
         ui->teListOfSongs->clear();
         ui->coverImgLabel->clear();
     }
+}
+
+
+void MainWindow::on_editAlbumButton_clicked()
+{
+    QListWidgetItem* selectedItem = ui->albumList->currentItem();
+    if (!selectedItem) return;
+
+    QSqlQuery querySearch;
+    QString searchString = "SELECT * FROM albums WHERE album_name = '" + ui->albumList->currentItem()->text() + "'";
+
+    if (!querySearch.exec(searchString)) {
+        QMessageBox::information(this, "Query not executed", "Search query was not executed.");
+        return;
+    } else {
+        if (querySearch.next()) {
+            ui->teAlbumNameEdit->setPlainText(querySearch.value("album_name").toString());
+            ui->teAuthorNameEdit->setPlainText(querySearch.value("author_name").toString());
+            ui->teYearOfCreationEdit->setText(querySearch.value("creation_year").toString());
+            ui->teGenreEdit->setPlainText(querySearch.value("genre").toString());
+
+            QString songListString = querySearch.value("song_list").toString();
+            QStringList songList = songListString.split(",");
+            ui->teListOfSongsEdit->setPlainText(songListString);
+
+            for (const QString& song : songList)
+            {
+                ui->albumSongList->addItem(song);
+            }
+
+            QString imageSrc = querySearch.value("cover_image").toString();
+            ui->coverImgLabelEdit->setText(imageSrc);
+
+            QPixmap image(imageSrc);
+            QPixmap scaledImage = image.scaled(200, 200, Qt::KeepAspectRatioByExpanding);
+
+            ui->albumImageEdit->setFixedSize(200, 200);
+            ui->albumImageEdit->setPixmap(scaledImage);
+
+        }
+    }
+
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void MainWindow::on_addAlbumButtonEdit_clicked()
+{
+    const QString albumName = ui->teAlbumNameEdit->toPlainText();
+    const QString authorName = ui->teAuthorNameEdit->toPlainText();
+    const QString yearOfCreation = ui->teYearOfCreationEdit->text();
+    const QString genre = ui->teGenreEdit->toPlainText();
+    const QString listOfSongs = ui->teListOfSongsEdit->toPlainText();
+    QString coverImg = ui->coverImgLabelEdit->text();
+
+    if (albumName.isEmpty() || authorName.isEmpty() || yearOfCreation.isEmpty() || genre.isEmpty() || listOfSongs.isEmpty()) return;
+
+    if (coverImg.isEmpty()) {
+        coverImg = QDir::current().absoluteFilePath("data/images/img-cover.jpg");
+    }
+
+    QSqlQuery queryAddAlbum;
+    queryAddAlbum.prepare("UPDATE albums SET author_name=:authorName, album_name=:albumName, creation_year=:yearOfCreation, genre=:genre, song_list=:listOfSongs, cover_image=:coverImg "
+                          "WHERE album_name=:albumName");
+
+
+    queryAddAlbum.bindValue(":authorName", authorName);
+    queryAddAlbum.bindValue(":albumName", albumName);
+    queryAddAlbum.bindValue(":yearOfCreation", yearOfCreation);
+    queryAddAlbum.bindValue(":genre", genre);
+    queryAddAlbum.bindValue(":listOfSongs", listOfSongs);
+    queryAddAlbum.bindValue(":coverImg", coverImg);
+
+    if (!queryAddAlbum.exec()) {
+        QMessageBox::information(this, "Query not executed", "Update query was not executed.");
+        return;
+    } else {
+        QMessageBox::information(this, "Album added", "The album has been added to the collection.");
+
+        ui->teAlbumName->clear();
+        ui->teAuthorName->clear();
+        ui->teYearOfCreation->clear();
+        ui->teGenre->clear();
+        ui->teListOfSongs->clear();
+        ui->coverImgLabel->clear();
+    }
+
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+
+void MainWindow::on_albumLibPageButtonEdit_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
 }
 

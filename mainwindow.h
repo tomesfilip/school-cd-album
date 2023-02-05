@@ -51,6 +51,12 @@ private slots:
 
     void on_addAlbumButton_clicked();
 
+    void on_editAlbumButton_clicked();
+
+    void on_addAlbumButtonEdit_clicked();
+
+    void on_albumLibPageButtonEdit_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
