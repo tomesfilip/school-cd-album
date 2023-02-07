@@ -250,6 +250,7 @@ void MainWindow::on_editAlbumButton_clicked()
             QString songListString = querySearch.value("song_list").toString();
             QStringList songList = songListString.split(",");
             ui->teListOfSongsEdit->setPlainText(songListString);
+            ui->albumSongList->clear();
 
             for (const QString& song : songList)
             {
