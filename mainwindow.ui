@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>981</width>
-    <height>700</height>
+    <width>823</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -44,6 +44,49 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
+    <widget class="QWidget" name="setupPage">
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>431</width>
+        <height>82</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Select a path where to store data:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="selectedPath"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="selectPathButton">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Select directory</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
     <widget class="QWidget" name="viewAlbumsPage">
      <property name="maximumSize">
       <size>

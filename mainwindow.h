@@ -57,6 +57,8 @@ private slots:
 
     void on_albumLibPageButtonEdit_clicked();
 
+    void on_selectPathButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

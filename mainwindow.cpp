@@ -31,15 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
     QRegularExpressionValidator *yearValidator = new QRegularExpressionValidator(yearRx, this);
     ui->teSearchYear->setValidator(yearValidator);
     ui->teYearOfCreation->setValidator(yearValidator);
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(QDir::current().absoluteFilePath("data/Album.db"));
-
-    if (!db.open()) {
-        QMessageBox::information(this, "Not connected", "Datbase is not connected.");
-    }
-
-    renderAlbums(ui);
 }
 
 MainWindow::~MainWindow()
@@ -99,19 +90,19 @@ void MainWindow::on_searchButton_clicked()
 
 void MainWindow::on_albumLibPageButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 
 void MainWindow::on_newAlbumPageButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 
 void MainWindow::on_fromDetailToLibButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 
@@ -150,7 +141,7 @@ void MainWindow::on_goToDetailButton_clicked()
         }
     }
 
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentIndex(3);
 }
 
 
@@ -223,7 +214,7 @@ void MainWindow::on_addAlbumButton_clicked()
     queryAddAlbum.bindValue(":coverImg", coverImg);
 
     if (!queryAddAlbum.exec()) {
-        QMessageBox::information(this, "Query not executed", "Insertion query was not executed.");
+        QMessageBox::information(this, "Query not executed", "Insertion query was not executed. Error: " + queryAddAlbum.lastError().text());
         return;
     } else {
         QMessageBox::information(this, "Album added", "The album has been added to the collection.");
@@ -322,12 +313,39 @@ void MainWindow::on_addAlbumButtonEdit_clicked()
         ui->coverImgLabel->clear();
     }
 
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 
 void MainWindow::on_albumLibPageButtonEdit_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
+
+void MainWindow::on_selectPathButton_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory( this, "Select folder...", QDir::currentPath());
+    if(!dir.isEmpty()){
+        ui->selectedPath->setText(dir);
+    } else {
+        return;
+    }
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(dir + "/Album.db");
+
+    if (!db.open()) {
+        QMessageBox::information(this, "Not connected", "Datbase is not connected.");
+    }
+
+    QSqlQuery queryCreateTable;
+    QString createTableString = "CREATE TABLE IF NOT EXISTS albums (album_id TEXT, album_name TEXT PRIMARY KEY, author_name TEXT, creation_year TEXT, genre TEXT, song_list TEXT, cover_image TEXT)";
+    if (!queryCreateTable.exec(createTableString)) {
+        QMessageBox::information(this, "Table not created", "Table could not be created. Error: " + queryCreateTable.lastError().text());
+    }
+
+    ui->selectedPath->clear();
+    renderAlbums(ui);
+    ui->stackedWidget->setCurrentIndex(1);
+}
